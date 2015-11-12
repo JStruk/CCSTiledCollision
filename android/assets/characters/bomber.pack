@@ -1,0 +1,61 @@
+
+bomber.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+frontwalk
+  rotate: false
+  xy: 1, 1
+  size: 25, 36
+  orig: 25, 36
+  offset: 0, 0
+  index: -1
+stopback
+  rotate: false
+  xy: 28, 1
+  size: 25, 36
+  orig: 25, 36
+  offset: 0, 0
+  index: -1
+stopfront
+  rotate: false
+  xy: 55, 1
+  size: 25, 36
+  orig: 25, 36
+  offset: 0, 0
+  index: -1
+stopleft
+  rotate: false
+  xy: 82, 1
+  size: 25, 36
+  orig: 25, 36
+  offset: 0, 0
+  index: -1
+stopright
+  rotate: false
+  xy: 109, 1
+  size: 25, 36
+  orig: 25, 36
+  offset: 0, 0
+  index: -1
+walkback
+  rotate: false
+  xy: 136, 1
+  size: 25, 36
+  orig: 25, 36
+  offset: 0, 0
+  index: -1
+walkleft
+  rotate: false
+  xy: 163, 1
+  size: 25, 36
+  orig: 25, 36
+  offset: 0, 0
+  index: -1
+walkright
+  rotate: false
+  xy: 190, 1
+  size: 25, 36
+  orig: 25, 36
+  offset: 0, 0
+  index: -1

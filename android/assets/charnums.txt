@@ -1,0 +1,4 @@
+front = 0,1
+back = 2,3
+left = 4,5
+right = 6,7

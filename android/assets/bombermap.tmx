@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="23" height="17" tilewidth="31" tileheight="32" nextobjectid="102">
+ <tileset firstgid="1" name="bomberman" tilewidth="31" tileheight="32" tilecount="160">
+  <image source="basictiles.png" width="496" height="321"/>
+  <tile id="1" probability="100">
+   <properties>
+    <property name="Block" value="5"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="bombit" value=""/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="grass" value="6"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="Block" value="5"/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="Block" value="5"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="ground" width="23" height="17">
+  <data encoding="base64" compression="zlib">
+   eJy9UkkKACAI7OD/39xdZkswIdJ0dDTP+SsVHoVDvuTu8QzP8jNfNT3pJeHn3t2cHK9qOKSj+o7PpD/GV9kKp/rZ4s04OBvlSfi4uJc9UfVd/HS+Lh6J+oNk7j1XsvcpT+VP5612Q2E35AK8ZQKV
+  </data>
+ </layer>
+ <layer name="Bombit" width="23" height="17">
+  <data encoding="base64" compression="zlib">
+   eJy1U9EKADEICu7///leh9TUswsGG6SZq6p/44GziXP4uvwbHmujHtSlcLn6FG6lNsNij+e9w7u+Ozj2R5Pnib8bONWr7v21j3T+p5xpJja1KJiJW9HGME5Pyf6xYHuWcKfxAgjRAPE=
+  </data>
+ </layer>
+ <layer name="Walls" width="23" height="17">
+  <data encoding="base64" compression="zlib">
+   eJxjYmBgYKIhpgVANpsW9Ki7UcGou0fdTQwYdffAuJtWGACEiQEl
+  </data>
+ </layer>
+</map>

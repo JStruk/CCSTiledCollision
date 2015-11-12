@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="23" height="17" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="bomberman" tilewidth="31" tileheight="32" tilecount="160">
+  <image source="basictiles.png" width="496" height="321"/>
+  <tile id="1">
+   <properties>
+    <property name="Block" value="5"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="bombit" value=""/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="grass" value=""/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="Block" value="5"/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="Block" value="5"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="23" height="17">
+  <data encoding="base64" compression="zlib">
+   eJy9k0sKACEMQ0ud+595thKSNhV0UfzrS4gZEXmxFtRnVnVuvzu3ua7F/eo8cjMe5Kq0re2tCV83j+sp3nZ8Vn3GPfXd8VvxVuPO/9fcjMHRgzrcnJzmn+WE/btKF+pxuE9zjXc7bMp39ndVTlQ71THxu8qGyvet+gE8pgSo
+  </data>
+ </layer>
+</map>

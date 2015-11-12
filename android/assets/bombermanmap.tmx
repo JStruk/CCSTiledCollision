@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="bomberman" tilewidth="31" tileheight="32" tilecount="160">
+  <image source="basictiles.png" width="496" height="321"/>
+  <tile id="1">
+   <properties>
+    <property name="Block" value="5"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="bombit" value=""/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="grass" value=""/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="Block" value="5"/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="Block" value="5"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Layer 1" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2dkKg0AMBVCx/v83lz4MlDBbgkKh54DYRV8mucTB8ziO86GDvM+6vcJxbR6z+9SjptXjc742z/H60f3kxXz0+j72/yxD7Vr1qMnkYPV7/J+8to6xx3fmxuizetRl+j6bI/K+8xFzMfu+mifqUSMfvyXmo9frO7mJeVGPmp2+r+5PyOs9X/X237P8xNyoR90dc2KUJ/Laeu5kYDRHent49aiZ9fdqfqzyQl5mfsyeqew/7vHUuw/1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4D2+RiASo
+  </data>
+ </layer>
+</map>
