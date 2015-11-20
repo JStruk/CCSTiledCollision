@@ -17,7 +17,7 @@ public class CCSTiledCollision extends ApplicationAdapter {
 		map.ThumbstickHeight(thumbstick.fTouchPadHeight);
 		map.create();
 		character = new Character();
-		character.setMap(map);
+		character.setMap(map, map.nYTiles);
 		character.create();
 		thumbstick.setCharacter(character, character.arbDirection, character.bStop);
 	}

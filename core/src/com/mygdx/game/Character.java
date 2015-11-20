@@ -2,9 +2,12 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.MapObjects;
 
 
 /**
@@ -20,14 +23,24 @@ public class Character implements ApplicationListener {
     boolean[] arbDirection = new boolean[4];//0=up, 1=down, 2=right, 3=left
     boolean bStop = true, bCollidedX, bCollidedY;
     Sprite sprChar;
-    int nSHeight, nSWidth, nLayerCount, nC = 0, nTileHeight, nTileWidth;
+    int nSHeight, nSWidth, nLayerCount, nC = 0, nTileHeight, nTileWidth, nYtiles, nCharacterWidth;
     Map map;
+    Texture txChar;
+    OrthographicCamera cam;
+    String sID;
+    MapObjects collisionObjects;
+//    MapObjects collisionObjects = (GameAssets.mainTiledMap).getLayers().get("CollisionLayer").getObjects();
 
-    public void setMap(Map _map) {
+    public void setMap(Map _map, int _nYtiles) {
+        nYtiles = _nYtiles;
         map = _map;
     }
 
     public void create() {
+        collisionObjects = map.tiledMap.getLayers().get("CollisionLayer").getObjects();
+
+
+        // cam = map.getCam();
         nSHeight = Gdx.graphics.getHeight(); //use to make scaling
         nSWidth = Gdx.graphics.getWidth();
         nVelocityX = nSWidth * 10 / 1794;
@@ -36,12 +49,17 @@ public class Character implements ApplicationListener {
         arbDirection[0] = true;
         batch = new SpriteBatch();
         taBomberman = new TextureAtlas(Gdx.files.internal("bomberchar.pack"));
+        //txChar = new Texture(new TextureRegion(taBomberman.findRegion("frame-0.png")));
+        //    txChar= new Texture(taBomberman.findRegion("frame-0.png"));
         spBomberman = new Sprite[4];
         sprChar = new Sprite();
         fCharacterX = (map.nMapWidth - 200);
         fCharacterY = map.nMapHeight - 350;
         nTileHeight = (int) map.collisionLayer.getTileHeight();
         nTileWidth = (int) map.collisionLayer.getTileWidth();
+        sprChar = new Sprite(taBomberman.findRegion("frame-0"));
+        sprChar.setBounds(fCharacterX, fCharacterY, 1, 1);
+        nCharacterWidth = nSWidth * 110 / 1794;
     }
 
     @Override
@@ -55,7 +73,69 @@ public class Character implements ApplicationListener {
         fCharacterVelocityY = nVelocityY * _nVy;
     }
 
+    public String getTileID(float fX, float fY, int nWidth) {
+        String sID = "";
+        //  if (map.collisionLayer.getCell((int) ((fX + sprChar.getWidth() / 2) / nTileWidth), (int) (17 - (fY / nTileHeight))) != null) {
+        //}
+        // sID = map.collisionLayer.getCell((int) ((fX + sprChar.getWidth() / 2) / nTileWidth), (int) (17 - (fY / nTileHeight))).getTile().getProperties().getKeys().next();
+        if (map.collisionLayer.getCell((int) ((fX + nWidth / 2) / nTileWidth), (int) (fY / nTileHeight)) != null) {
+            sID = map.collisionLayer.getCell((int) ((fX + nWidth / 2) / nTileWidth), (int) (fY / nTileHeight)).getTile().getProperties().getKeys().next();
+        }
+        if (map.collisionLayer.getCell((int) (fCharacterX / nTileWidth), ((int) ((fCharacterY + sprChar.getHeight() / 2) / nTileHeight))) != null) {//leftcollision
+            sID = map.collisionLayer.getCell((int) (fCharacterX / nTileWidth), ((int) (fCharacterY + sprChar.getHeight() / 2) / nTileHeight)).getTile().getProperties().getKeys().next();
+        }
+
+        if (map.collisionLayer.getCell((int) ((fCharacterX + sprChar.getWidth()) / nTileWidth), (int) (1+(fCharacterY + sprChar.getWidth() / 2) / nTileHeight)) != null) {
+            sID = map.collisionLayer.getCell((int) ((fCharacterX + sprChar.getWidth()) / nTileWidth), (int) (1+(fCharacterY + sprChar.getWidth() / 2) / nTileHeight)).getTile().getProperties().getKeys().next();
+        }
+
+        if (map.collisionLayer.getCell((int) ((fCharacterX + sprChar.getWidth() / 2) / nTileWidth), (int) ((fCharacterY + sprChar.getHeight() / 2) / nTileHeight)) != null) {
+            sID = map.collisionLayer.getCell((int) ((fCharacterX + sprChar.getWidth() / 2) / nTileWidth), (int) ((fCharacterY + sprChar.getHeight() / 2) / nTileHeight)).getTile().getProperties().getKeys().next();
+            System.out.println("X: " + (int) ((fCharacterX + sprChar.getWidth() / 2) / nTileWidth) + " Y: " + (int) (16 - ((fCharacterY + sprChar.getHeight() / 2) / nTileHeight)));
+        }
+        // sID = map.collisionLayer.getCell((int) ((fX + nWidth / 2) / nTileWidth), (int) (17 - (fY / nTileHeight))).getTile().getProperties().getKeys().next();
+        return sID;
+    }
+   /* public boolean getTileID(float fX, float fY, int nWidth, String sID) {// this is slightly complicated but its basically grabbing the tile that the character is standing on and getting the ID
+        boolean bCollided = false;
+        //for (nLayerCount = 0; nLayerCount < armMaps[nCurrentMap].tiledMap.getLayers().getCount() - 1; nLayerCount++) {
+
+            bCollided = map.collisionLayer.getCell((int) ((fX + nWidth / 4) / nTileWidth), (int) (fY / nTileHeight))
+                    .getTile().getProperties().containsKey(sID);
+
+            bCollided |=map.collisionLayer.getCell((int) ((fX + 3 * nWidth / 4) / nTileWidth), (int) (fY / nTileHeight))
+                    .getTile().getProperties().containsKey(sID);
+
+            bCollided |=map.collisionLayer.getCell((int) ((fX + nWidth / 2) / nTileWidth), (int) (fY / nTileHeight))
+                    .getTile().getProperties().containsKey(sID);
+       // }
+        return bCollided;
+    }*/
+
+
     public void render() {
+      /*  for (int i = 0; i < collisionObjects.getCount(); i++) {
+            RectangleMapObject obj = (RectangleMapObject) collisionObjects.get(i);
+            Rectangle rect = obj.getRectangle();
+
+          //  rect.set(fCharacterX, fCharacterY, 32,31);
+
+           // Rectangle rectobject = obj.getRectangle();
+            rect.x /= nTileWidth;
+            rect.y /= nTileHeight;
+          //  rectobject.width /= nTileWidth;
+          ///  rectobject.height /= nTileHeight;
+
+
+            if(rect.overlaps(sprChar.getBoundingRectangle())) {
+                System.out.println("collision");
+            }
+        }*/
+        // cam.setToOrtho(false, fCharacterX, fCharacterY);
+        // cam.position.y = fCharacterY;
+        //cam.position.x = fCharacterX;
+        //  map.setCamera(cam);
+        nC++;
         fOldX = fCharacterX;
         fOldY = fCharacterY;
         bCollidedX = false;
@@ -64,34 +144,47 @@ public class Character implements ApplicationListener {
         // Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         fCharacterX += fCharacterVelocityX / 2;
         fCharacterY += fCharacterVelocityY / 2;
-        sprChar = new Sprite(taBomberman.findRegion("frame-0"));// (int) ((fCharacterY+sprChar.getHeight()/2)/nTileHeight)
-        if (map.collisionLayer.getCell((int) (fCharacterX / nTileWidth), ((int) (16-((fCharacterY + sprChar.getHeight() / 2) / nTileHeight)))) != null) {//leftcollision
-            bCollidedX = map.collisionLayer.getCell((int) (fCharacterX / nTileWidth), ((int) (16-((fCharacterY + sprChar.getHeight() / 2) / nTileHeight)))).getTile().getProperties().containsKey("Block");
-            System.out.println("X: "+(int) (fCharacterX / nTileWidth)+" Y: "+(int) (16-((fCharacterY + sprChar.getHeight() / 2) / nTileHeight)));
+        // (int) ((fCharacterY+sprChar.getHeight()/2)/nTileHeight)
+       /*if (map.collisionLayer.getCell((int) (fCharacterX / nTileWidth), ((int) (16 - ((fCharacterY + sprChar.getHeight() / 2) / nTileHeight)))) != null) {//leftcollision
+            bCollidedX = map.collisionLayer.getCell((int) (fCharacterX / nTileWidth), ((int) (16 -(fCharacterY + sprChar.getHeight() / 2) / nTileHeight))).getTile().getProperties().containsKey("Block");
+            System.out.println("X: " + (int) (fCharacterX / nTileWidth) + " Y: " + (int) (16 - ((fCharacterY + sprChar.getHeight() / 2) / nTileHeight)));
         }
-           // if (!bCollidedX) {
-       /* if(map.collisionLayer.getCell((int) (((fCharacterX+sprChar.getWidth()) / nTileWidth)), (int) (((fCharacterY + sprChar.getHeight() / 2) / nTileHeight)))!=null) {
+        if (map.collisionLayer.getCell((int) ((fCharacterX + sprChar.getWidth() / 2) / nTileWidth), (int) (17 - (fCharacterY / nTileHeight))) != null) {//bottomcollision
+            bCollidedY = map.collisionLayer.getCell((int) ((fCharacterX + sprChar.getWidth() / 2) / nTileWidth), (int) (17 - (fCharacterY / nTileHeight))).getTile().getProperties().containsKey("Block");
+        }
+        if (map.collisionLayer.getCell((int) (2 + ((fCharacterX + sprChar.getWidth()) / nTileWidth)), (int) (17 - (fCharacterY + sprChar.getWidth() / 2) / nTileHeight)) != null) {
             System.out.println("right");
-            bCollidedX = map.collisionLayer.getCell((int) (((fCharacterX+sprChar.getWidth())/nTileWidth)), (int) (fCharacterY+sprChar.getWidth()/2)/nTileHeight).getTile().getProperties().containsKey("Block");
-           // bCollidedX = map.collisionLayer.getCell(((int) ((fCharacterX + sprChar.getWidth() / nTileWidth))), ((int) (((fCharacterY + sprChar.getWidth() / 2) / nTileHeight)))).getTile().getProperties().containsKey("Block");
-        }*/
-        if(map.collisionLayer.getCell((int) ((fCharacterX+sprChar.getWidth()/2)/nTileWidth), (int) (16-(fCharacterY/nTileHeight)))!=null) {//bottomcollision
-            bCollidedY = map.collisionLayer.getCell((int) ((fCharacterX + sprChar.getWidth() / 2) / nTileWidth), (int) (16-(fCharacterY / nTileHeight))).getTile().getProperties().containsKey("Block");
+            bCollidedX = map.collisionLayer.getCell((int) (2 + ((fCharacterX + sprChar.getWidth()) / nTileWidth)), (int) (17 - (fCharacterY + sprChar.getWidth() / 2) / nTileHeight)).getTile().getProperties().containsKey("Block");
+            System.out.println("X: " + (int) (2 + ((fCharacterX + sprChar.getWidth()) / nTileWidth)) + "Y: " + (int) (17 - (fCharacterY + sprChar.getWidth() / 2) / nTileHeight));
+            // bCollidedX = map.collisionLayer.getCell(((int) ((fCharacterX + sprChar.getWidth() / nTileWidth))), ((int) (((fCharacterY + sprChar.getWidth() / 2) / nTileHeight)))).getTile().getProperties().containsKey("Block");
         }
-        if(map.collisionLayer.getCell((int) ((fCharacterX+sprChar.getWidth()/2)/nTileWidth), (int) ((fCharacterY + sprChar.getHeight() / 2) / nTileHeight))!=null) {
+        if (map.collisionLayer.getCell((int) ((fCharacterX + sprChar.getWidth() / 2) / nTileWidth), (int) (15 - ((fCharacterY + sprChar.getHeight() / 2) / nTileHeight))) != null) {
             System.out.println("top");
-            bCollidedY = map.collisionLayer.getCell((int) ((fCharacterX + sprChar.getWidth() / 2) / nTileWidth), (int) ((fCharacterY + sprChar.getHeight() / 2) / nTileHeight)).getTile().getProperties().containsKey("Block");
-         //   System.out.println("X: "+(int)((fCharacterX + sprChar.getWidth() / 2) / nTileWidth) + " Y: "+(int)(16-((fCharacterY + sprChar.getHeight() / 2) / nTileHeight)));
+            bCollidedY = map.collisionLayer.getCell((int) ((fCharacterX + sprChar.getWidth() / 2) / nTileWidth), (int) (15 - ((fCharacterY + sprChar.getHeight() / 2) / nTileHeight))).getTile().getProperties().containsKey("Block");
+            //   System.out.println("X: "+(int)((fCharacterX + sprChar.getWidth() / 2) / nTileWidth) + " Y: "+(int)(16-((fCharacterY + sprChar.getHeight() / 2) / nTileHeight)));
         }
-           // }
+       /* if (map.collisionLayer.getCell((int) (fCharacterX / nTileWidth), (int) (nYtiles-(fCharacterY / nTileHeight))) != null) {
+            bCollidedX = map.collisionLayer.getCell((int) (fCharacterX / nTileWidth), (int)(nYtiles-(fCharacterY / nTileHeight))).getTile().getProperties().containsKey("Block");
+s
+        }*/
+        //  bCollidedX = getTileID(fCharacterX, fCharacterY,nSWidth, "Block");
+        sID = getTileID(fCharacterX, fCharacterY, nCharacterWidth);
+        if (sID.equalsIgnoreCase("block")) {
+            fCharacterX = fOldX;
+            fCharacterY = fOldY;
+        }
+        System.out.println(sID);
+        if (nC % 15 == 0) {
+            System.out.println("X: " + (int) fCharacterX / nTileWidth + " Y: " + (int) (nYtiles - (fCharacterY / nTileHeight)));
+        }
+        // }
         //}
-
         if (bCollidedX || bCollidedY) {
             fCharacterX = fOldX;
             fCharacterY = fOldY;
-            System.out.println("collision");
+            // fCharacterX=100;
+            // fCharacterY=100;
         }
-
         batch.begin();
         batch.draw(sprChar, fCharacterX, fCharacterY);
         batch.end();
